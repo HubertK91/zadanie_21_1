@@ -5,6 +5,9 @@ public class Product {
     private double price;
     private ProductCategory category;
 
+    public Product() {
+    }
+
     public Product(String name, double price, ProductCategory category) {
         this.name = name;
         this.price = price;

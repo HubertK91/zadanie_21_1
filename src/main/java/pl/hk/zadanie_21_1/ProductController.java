@@ -3,7 +3,7 @@ package pl.hk.zadanie_21_1;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -16,12 +16,22 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @RequestMapping("/")
-    public String home(String name, double price, ProductCategory category) {
-        Product product = new Product(name, price, category);
-        productRepository.add(product);
-        return "index.html";
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("spozywcze", ProductCategory.FOOD.getDescription());
+        model.addAttribute("domowe", ProductCategory.AGD.getDescription());
+        model.addAttribute("inne", ProductCategory.OTHER.getDescription());
+        Product product = new Product();
+        model.addAttribute("product",product);
+        return "index";
     }
+
+    @PostMapping("/add")
+    public String add(Product product) {
+        productRepository.add(product);
+        return "redirect:/";
+    }
+
 
     @GetMapping("/lista")
     public String printByCategory(Model model, @RequestParam(name = "kategoria", required = false) String category) {
